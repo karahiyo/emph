@@ -12,7 +12,7 @@ install:
 	gom install
 
 pkg:
-	gom exec go build -o $(CWD)/pkg/emph
+	gom exec go build -o $(CWD)/bin/emph
 
 run:
 	gom run emph.go
