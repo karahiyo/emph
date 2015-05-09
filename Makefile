@@ -11,8 +11,8 @@ install:
 	go get github.com/mattn/gom
 	gom install
 
-package:
-	gom exec go build -o $(CWD)/package/emph
+pkg:
+	gom exec go build -o $(CWD)/pkg/emph
 
 run:
 	gom run emph.go
@@ -23,3 +23,4 @@ test:
 fmt:
 	gofmt -w *.go
 
+.PHONY: pkg
