@@ -17,7 +17,12 @@ pkg:
 test:
 	gom test -v
 
+integration_test:
+	find $(CWD)/integration_test/log -type f | \
+		xargs tail -f | \
+		$(CWD)/bin/emph -c $(CWD)/integration_test/conf/sample
+
 fmt:
 	gofmt -w *.go
 
-.PHONY: pkg
+.PHONY: pkg integration_test
