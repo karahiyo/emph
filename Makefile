@@ -15,7 +15,7 @@ pkg:
 	gom exec go build -o $(CWD)/bin/emph
 
 run:
-	gom run emph.go
+	gom run emph.go -c "/Users/yu_ke/workspace/emph/t/conf/sample"
 
 test:
 	gom test -v

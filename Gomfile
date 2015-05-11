@@ -1,2 +1,3 @@
 gom "github.com/codegangsta/cli"
 gom "github.com/mgutz/ansi", :commands => 'go get -u github.com/mgutz/ansi/cmd/ansi-mgutz'
+gom "code.google.com/p/gcfg"
