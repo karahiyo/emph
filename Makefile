@@ -18,9 +18,12 @@ test:
 	gom test -v
 
 integration_test:
-	find $(CWD)/integration_test/log -type f | \
-		xargs tail -f | \
+	@echo "\n** case sample\n"
+	@cat $(CWD)/integration_test/log/sample | \
 		$(CWD)/bin/emph -c $(CWD)/integration_test/conf/sample
+	@echo "\n** case aieeee\n"
+	@cat $(CWD)/integration_test/log/aieeee | \
+		$(CWD)/bin/emph -c $(CWD)/integration_test/conf/aieeee
 
 fmt:
 	gofmt -w *.go
