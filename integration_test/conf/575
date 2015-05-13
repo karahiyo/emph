@@ -1,0 +1,3 @@
+"^\S*"	"red"
+" \S*\B"	"yellow"
+"\s.\S*$"	"blue"
