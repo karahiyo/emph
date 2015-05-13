@@ -4,7 +4,7 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/mgutz/ansi"
 	"encoding/csv"
-	"strings"
+	"regexp"
 	"bufio"
 	"fmt"
 	"os"
@@ -14,6 +14,11 @@ import (
 const (
 	REPLACE_ALL = -1
 )
+
+type Item struct {
+	RegexpObj		*regexp.Regexp
+	ColorCode		string // TODO: should use ansi.ColorFunc obj
+}
 
 func main() {
 
@@ -40,7 +45,7 @@ func main() {
 			defer fp.Close()
 		}
 
-		conf := make(map[string]string)
+		var conf []Item
 		reader := csv.NewReader(fp)
 		reader.Comma = '\t'
 		for {
@@ -50,20 +55,23 @@ func main() {
 			} else if err != nil {
 				panic(err)
 			}
-			conf[record[0]] = record[1]
-		}
-		keys := make([]string, len(conf))
-		for k, _ := range conf {
-			keys = append(keys, k)
+			re, err := regexp.Compile(record[0])
+			if err != nil {
+				continue
+			}
+			i := Item { RegexpObj: re, ColorCode: record[1] }
+			conf = append(conf, i)
 		}
 
 		scanner := bufio.NewScanner(os.Stdin)
 		for scanner.Scan() {
 			line := scanner.Text()
-			for _, k := range keys {
-				if strings.Contains(line, k) {
-					line = strings.Replace(line, k, ansi.Color(k, conf[k]), REPLACE_ALL)
-				}
+			for _, i := range conf {
+				r := i.RegexpObj
+				line = r.ReplaceAllStringFunc(line,
+				func(m string) string {
+					return ansi.Color(m, i.ColorCode)
+				})
 			}
 			fmt.Println(line)
 		}
