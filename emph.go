@@ -33,32 +33,34 @@ func main() {
 		},
 	}
 	app.Action = func(c *cli.Context) {
-		fp, err := os.Open(c.String("conf"))
-		if err != nil {
-			panic(err)
-		}
-		defer fp.Close()
-
 		var conf []Item
-		reader := csv.NewReader(fp)
-		reader.Comma = '\t'
-		for {
-			record, err := reader.Read()
-			if err == io.EOF {
-				break
-			} else if err != nil {
+		if c.String("conf") != "" {
+			fp, err := os.Open(c.String("conf"))
+			if err != nil {
 				panic(err)
 			}
-			re, err := regexp.Compile(record[0])
-			if err != nil {
-				continue
+			defer fp.Close()
+
+			reader := csv.NewReader(fp)
+			reader.Comma = '\t'
+			for {
+				record, err := reader.Read()
+				if err == io.EOF {
+					break
+				} else if err != nil {
+					panic(err)
+				}
+				re, err := regexp.Compile(record[0])
+				if err != nil {
+					continue
+				}
+				cc := ansi.ColorCode(record[1])
+				if cc == "" {
+					continue
+				}
+				i := Item { RegexpObj: re, ColorCode: cc }
+				conf = append(conf, i)
 			}
-			cc := ansi.ColorCode(record[1])
-			if cc == "" {
-				continue
-			}
-			i := Item { RegexpObj: re, ColorCode: cc }
-			conf = append(conf, i)
 		}
 
 		scanner := bufio.NewScanner(os.Stdin)
