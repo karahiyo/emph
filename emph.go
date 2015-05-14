@@ -16,8 +16,8 @@ const (
 )
 
 type Item struct {
-	RegexpObj		*regexp.Regexp
-	ColorCode		string // TODO: should use ansi.ColorFunc obj
+	RegexpObj	*regexp.Regexp
+	ColorCode	string
 }
 
 func main() {
@@ -59,7 +59,11 @@ func main() {
 			if err != nil {
 				continue
 			}
-			i := Item { RegexpObj: re, ColorCode: record[1] }
+			cc := ansi.ColorCode(record[1])
+			if cc == "" {
+				continue
+			}
+			i := Item { RegexpObj: re, ColorCode: cc }
 			conf = append(conf, i)
 		}
 
@@ -68,9 +72,10 @@ func main() {
 			line := scanner.Text()
 			for _, i := range conf {
 				r := i.RegexpObj
+				cc := i.ColorCode
 				line = r.ReplaceAllStringFunc(line,
 				func(m string) string {
-					return ansi.Color(m, i.ColorCode)
+					return cc + m + ansi.Reset
 				})
 			}
 			fmt.Println(line)
