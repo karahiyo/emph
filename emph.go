@@ -33,17 +33,11 @@ func main() {
 		},
 	}
 	app.Action = func(c *cli.Context) {
-		var fp *os.File
-		if len(os.Args) < 2 {
-			fp = os.Stdin
-		} else {
-			var err error
-			fp, err = os.Open(c.String("conf"))
-			if err != nil {
-				panic(err)
-			}
-			defer fp.Close()
+		fp, err := os.Open(c.String("conf"))
+		if err != nil {
+			panic(err)
 		}
+		defer fp.Close()
 
 		var conf []Item
 		reader := csv.NewReader(fp)
