@@ -13,7 +13,7 @@ $ make integration_test
 
 output is like this,
 
-![2015-05-12 00 20 47](https://cloud.githubusercontent.com/assets/1106556/7568466/f2be69d2-f83d-11e4-8e20-8f31fb4a3650.png)
+![2015-05-17 21 29 41](https://cloud.githubusercontent.com/assets/1106556/7670338/0ad2a220-fcdc-11e4-835d-567b6caf24a6.png)
 
 ## Usage
 
